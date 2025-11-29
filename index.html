@@ -6,37 +6,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
-        :root {
-            --bg: #000;
-            --text: #fff;
-            --input-bg: #222;
-            --icon-filter: invert(1); /* white icon */
-        }
+        /* NEW and CORRECTED CSS for index.html */
+.dark {
+    --bg: #000;
+    --text: #fff;
+    --input-bg: #222; /* Consistent Dark Input Background */
+    --icon-filter: invert(1);
+    --table-border: #333;
+    --table-header-color: #000;
+}
 
-        .light {
-            --bg: #fff;
-            --text: #000;
-            --input-bg: #f1f1f1;
-            --icon-filter: invert(0); /* black icon */
-        }
+.light {
+    --bg: #fff;
+    --text: #000;
+    --input-bg: #f1f1f1;
+    --icon-filter: invert(0);
+    --table-border: #999;
+    --table-header-color: #888;
+}
 
-        @media (prefers-color-scheme: light) {
-            .system {
-                --bg: #fff;
-                --text: #000;
-                --input-bg: #f3f3f3;
-                --icon-filter: invert(0);
-            }
-        }
+@media (prefers-color-scheme: light) {
+    .system {
+        /* Adopts the Light Theme variables when system is light */
+        --bg: #fff;
+        --text: #000;
+        --input-bg: #f1f1f1; 
+        --icon-filter: invert(0);
+        --table-border: #999;
+        --table-header-color: #888;
+    }
+}
 
-        @media (prefers-color-scheme: dark) {
-            .system {
-                --bg: #000;
-                --text: #fff;
-                --input-bg: #111;
-                --icon-filter: invert(1);
-            }
-        }
+@media (prefers-color-scheme: dark) {
+    .system {
+        /* Adopts the Dark Theme variables when system is dark */
+        --bg: #000;
+        --text: #fff;
+        --input-bg: #222; 
+        --icon-filter: invert(1);
+        --table-border: #333;
+        --table-header-color: #000;
+    }
+}
 
         body {
             background: var(--bg);
@@ -142,6 +153,7 @@
             padding: 10px 0;
             display: none;
             width: 140px;
+            z-index: 999;
         }
 
         .theme-menu div {
@@ -152,6 +164,26 @@
 
         .theme-menu div:hover {
             background: rgba(255,255,255,0.1);
+        }
+
+        /* Add this new block to the <style> section of both files */
+        .theme-menu div {
+            display: flex; /* CRITICAL: Enables flexible layout */
+            justify-content: space-between; /* Pushes the name to the left and the check to the right */
+            align-items: center;
+            padding: 10px 15px;
+            cursor: pointer;
+            color: var(--text);
+        }
+        .mode-name {
+            margin-right: 15px; 
+        }
+            
+        .mode-check {
+            width: 15px; /* Reserves space for the checkmark */
+            text-align: right;
+            color: var(--tick-color); /* Optional: Make the checkmark a distinct color */
+            font-size: 1.1rem;
         }
 
         .trending-section {
@@ -192,15 +224,24 @@
 <body class="dark" id="body">
 
     <button class="theme-btn" id="themeBtn">
-        <img id="themeIcon" src="https://img.icons8.com/ios-filled/50/moon-symbol.png">
+        <img id="themeIcon" src="moon-symbol.png">
     </button>
 
     <div class="theme-menu" id="themeMenu">
-        <div onclick="setTheme('dark')">Dark Mode</div>
-        <div onclick="setTheme('light')">Light Mode</div>
-        <div onclick="setTheme('system')">System Mode</div>
+        <div data-mode="dark">
+            <span class="mode-name">Dark</span>
+            <span class="mode-check"></span> 
+        </div>
+        <div data-mode="light">
+            <span class="mode-name">Light</span>
+            <span class="mode-check"></span> 
+        </div>
+        <div data-mode="system">
+            <span class="mode-name">System</span>
+            <span class="mode-check"></span>
+        </div>
     </div>
-
+    
     <div class="title-row">
         <div class="name">WhalesEyE</div>
         <div class="version">v[1&#215;10&#8315;&#185;]</div>
@@ -209,14 +250,14 @@
     <div class="search-wrapper">
         <input id="search" type="text" placeholder="Loading...">
         <button class="search-icon">
-            <img id="searchIcon" src="https://img.icons8.com/ios-filled/50/search.png">
+            <img id="searchIcon" src="search.png">
         </button>
     </div>
 
     <div class="trending-section">
         <h3>Trending Companies:</h3>
         <ul>
-            <li><a href="company.html">Apple Inc.</a></li>
+            <li><a href="file:///E:/whaleseye/company.html">Apple Inc.</a></li>
             <li><a href="#">Oracle Corporation</a></li>
             <li><a href="#">NVIDIA Corporation</a></li>
             <li><a href="#">Alphabet Inc. (Google)</a></li>
@@ -225,51 +266,137 @@
     </div>
 
     <script>
-        /* Rotating placeholder */
-        const suggestions = [
-            "Apple Inc.",
-            "Berkshire Hathaway Inc.",
-            "NVIDIA Corporation",
-            "The Vanguard Group, Inc.",
-            "Tesla, Inc.",
-            "BlackRock, Inc.",
-            "Alphabet Inc. (Google)",
-            "Scion Asset Management (Michael Burry)",
-            "Oracle Corporation",
-            "Soros Fund Management"
-        ];
+    /* Rotating placeholder - Keep this section unchanged */
+    const suggestions = [
+        "Apple Inc.",
+        "Berkshire Hathaway Inc.",
+        "NVIDIA Corporation",
+        "The Vanguard Group, Inc.",
+        "Tesla, Inc.",
+        "BlackRock, Inc.",
+        "Alphabet Inc. (Google)",
+        "Scion Asset Management (Michael Burry)",
+        "Oracle Corporation",
+        "Soros Fund Management"
+    ];
 
-        let index = 0;
-        const searchInput = document.getElementById("search");
+    let index = 0;
+    const searchInput = document.getElementById("search");
 
-        function rotatePlaceholder() {
-            searchInput.placeholder = `Try: ${suggestions[index]}`;
-            index = (index + 1) % suggestions.length;
+    function rotatePlaceholder() {
+        searchInput.placeholder = `Try: ${suggestions[index]}`;
+        index = (index + 1) % suggestions.length;
+    }
+    rotatePlaceholder();
+    setInterval(rotatePlaceholder, 2000);
+
+    /* Theme switching and Persistence Logic */
+    const body = document.getElementById("body");
+    const menu = document.getElementById("themeMenu");
+    const themeBtn = document.getElementById("themeBtn");
+    const themeIcon = document.getElementById("themeIcon");
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    // Function to update the icon based on the *current* visual state (dark/light)
+    function updateThemeIcon(isDark) {
+        if (isDark) {
+            themeIcon.src = "moon-symbol.png";
+        } else {
+            themeIcon.src = "sun--v1.png";
         }
-        rotatePlaceholder();
-        setInterval(rotatePlaceholder, 2000);
+    }
 
-        /* Theme switching */
-        const body = document.getElementById("body");
-        const menu = document.getElementById("themeMenu");
-        const themeBtn = document.getElementById("themeBtn");
-        const themeIcon = document.getElementById("themeIcon");
-
-        themeBtn.onclick = () => {
-            menu.style.display = menu.style.display === "block" ? "none" : "block";
-        };
-
-        function setTheme(mode) {
-            body.className = mode;
-            menu.style.display = "none";
-
-            if (mode === "light") {
-                themeIcon.src = "https://img.icons8.com/ios-filled/50/sun--v1.png";
+    // Function to update the theme menu indicators (NEW)
+    // Function to update the theme menu indicators (UPDATED)
+    function updateMenuIndicators(mode) {
+        menu.querySelectorAll('div').forEach(div => {
+            const checkSpan = div.querySelector('.mode-check');
+            const currentMode = div.getAttribute('data-mode');
+            if (currentMode === mode) {
+                checkSpan.innerHTML = '&#x2713;'; 
             } else {
-                themeIcon.src = "https://img.icons8.com/ios-filled/50/moon-symbol.png";
+                checkSpan.innerHTML = '';
             }
+        });
+}
+
+    // Function to set theme, save it to local storage, and update icon/indicators
+    function setTheme(mode) {
+        body.className = mode;
+        localStorage.setItem('themePreference', mode);
+        menu.style.display = "none";
+        
+        // Determine the actual visual state for the icon
+        const isDark = mode === 'dark' || (mode === 'system' && mediaQuery.matches);
+        updateThemeIcon(isDark);
+        updateMenuIndicators(mode);
+    }
+    
+    // Handler for system theme changes (CRITICAL FIX)
+    function handleSystemChange(e) {
+        // Only run if the current preference is 'system'
+        if (localStorage.getItem('themePreference') === 'system') {
+            updateThemeIcon(e.matches); // e.matches is true if dark mode is preferred
         }
-    </script>
+    }
+
+    // Attach the system change listener (CRITICAL FIX)
+    mediaQuery.addEventListener('change', handleSystemChange);
+
+
+    // Toggle menu visibility
+    themeBtn.onclick = () => {
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+    };
+
+    // Global function to initialize the theme on page load
+    function initializeTheme() {
+        const storedTheme = localStorage.getItem('themePreference');
+        const defaultMode = storedTheme || 'system'; // System is the default
+        
+        // Ensure menu items have data-mode attribute for indicator logic (NEW SETUP)
+        const menuItems = menu.querySelectorAll('div');
+        menuItems[0].setAttribute('data-mode', 'dark');
+        menuItems[1].setAttribute('data-mode', 'light');
+        menuItems[2].setAttribute('data-mode', 'system');
+
+        menuItems[0].onclick = () => setTheme('dark');
+        menuItems[1].onclick = () => setTheme('light');
+        menuItems[2].onclick = () => setTheme('system');
+
+        setTheme(defaultMode); // Apply the theme and update icon/indicators
+    }
+
+    // Run the initialization function immediately on load
+    initializeTheme();
+
+    // ... existing theme-related functions (setTheme, initializeTheme, etc.)
+
+// --- New Code for Click-Outside-To-Close ---
+document.addEventListener('click', function(event) {
+    const menu = document.getElementById("themeMenu");
+    const themeBtn = document.getElementById("themeBtn");
+
+    // Check if the menu is open
+    if (menu.style.display === 'block') {
+        // Check if the click target is NOT the menu itself AND NOT the button
+        const isClickInsideMenu = menu.contains(event.target);
+        const isClickOnButton = themeBtn.contains(event.target);
+
+        if (!isClickInsideMenu && !isClickOnButton) {
+            // Close the menu
+            menu.style.display = 'none';
+        }
+    }
+});
+// ------------------------------------------
+
+// ... other existing code like initializeTheme()
+</script>
+    
 
 </body>
 </html>
+
+
+
