@@ -212,18 +212,18 @@
             }
         }
 
-        /* --- QUARTER LIST UPDATED TO STRICT HORIZONTAL --- */
+        /* --- HORIZONTAL DATE SELECTION --- */
         .quarter-list {
             list-style: none;
             padding: 0;
             margin-top: 50px;
-            display: flex; /* Forces horizontal alignment */
-            flex-wrap: wrap; /* Allows it to wrap to next line if space is tight */
-            gap: 15px; /* Consistent spacing between items */
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 15px; 
         }
 
         .quarter-list li {
-            margin: 0; /* Clear previous margins */
+            margin: 0;
         }
 
         /* --- PAGINATION DESIGN --- */
@@ -234,6 +234,11 @@
             margin-bottom: 5px;
             display: flex;
             gap: 5px;
+            flex-wrap: wrap; /* KEY FIX: Forces second row on small mobile screens */
+        }
+
+        ul.pagination li {
+            margin: 0;
         }
 
         ul.pagination li a {
@@ -247,10 +252,9 @@
             color: var(--link-color);
         }
 
-        /* Highlight the active page */
         ul.pagination li a.active {
             background-color: var(--link-color);
-            color: var(--bg); /* Inverts text color for readability */
+            color: var(--bg); 
             border-color: var(--link-color);
         }
 
@@ -362,7 +366,8 @@
 
     <div class="apple">
         <ul class="pagination">
-            <li><a href="#" class="active">1</a></li> <li><a href="#">2</a></li>
+            <li><a href="#" class="active">1</a></li>
+            <li><a href="#">2</a></li>
             <li><a href="#">3</a></li>
             <li><a href="#">4</a></li>
             <li><a href="#">5</a></li>
