@@ -1,0 +1,238 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ company_name }} - WhalesEyE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* --- THEME SYSTEM VARIABLES --- */
+        @media (prefers-color-scheme: light) {
+            .system { --bg: #fff; --text: #000; --input-bg: #f1f1f1; --icon-filter: invert(0); --table-border: #999; --table-header-color: #888; --tick-color: black; --link-color: #0044cc; --zebra: rgba(0, 0, 0, 0.05); }
+        }
+        @media (prefers-color-scheme: dark) {
+            .system { --bg: #000; --text: #fff; --input-bg: #222; --icon-filter: invert(1); --table-border: #333; --table-header-color: #000; --tick-color: white; --link-color: #A3BAFF; --zebra: rgba(255, 255, 255, 0.05); }
+        }
+        :root { --bg: #000; --text: #fff; --input-bg: #222; --icon-filter: invert(1); --table-border: #333; --table-header-color: #000; --tick-color: white; --link-color: #A3BAFF; --zebra: rgba(255, 255, 255, 0.05); }
+        .light { --bg: #fff; --text: #000; --input-bg: #f1f1f1; --icon-filter: invert(0); --table-border: #999; --table-header-color: #888; --tick-color: black; --link-color: #0044cc; --zebra: rgba(0, 0, 0, 0.05); }
+
+        /* Manager Label Styling - Small and Grey, above the name */
+        .manager-label { 
+            font-size: 14px; /* Matches tab-link font size */
+            color: var(--text); 
+            opacity: 0.7; /* Matches inactive tab-link opacity */
+            font-family: system-ui, sans-serif; 
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        /* UI Elements */
+        .theme-btn { position: fixed; top: 10px; right: 10px; background: none; border: none; cursor: pointer; z-index: 1000; }
+        .theme-btn img { width: 26px; height: 26px; filter: var(--icon-filter); transition: filter 0.25s; }
+        .theme-menu { font-family: system-ui, sans-serif; position: fixed; top: 55px; right: 20px; background: var(--input-bg); border-radius: 8px; padding: 10px 0; display: none; width: 140px; z-index: 1000; }
+        .theme-menu div { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; cursor: pointer; color: var(--text); }
+        .theme-menu div:hover { background: rgba(255,255,255,0.1); }
+
+        #whaleseyename { border: 0%; padding: 15px; margin: 0%; background-color: var(--bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--table-border); font-family: system-ui, sans-serif; margin-top: -1vh; margin-left: -1vh; margin-right: -1vh; font-size: 20px; width: 100%; top: 0; left: 0; z-index: 999; position: fixed; }
+        body { background-color: var(--bg); color: var(--text); margin: 0; padding: 0; max-width: 850px; margin: 0 auto; padding: 10px; gap: 2px; }
+        
+        /* Container for the Header to adjust vertical placement */
+        .header-container { margin-top: 110px; margin-bottom: 20px; }
+        #companyname { font-size: 34px; font-family: 'Trebuchet MS', sans-serif; margin-top: 0; }
+        
+        #Overview { font-size: 16px; font-family: sans-serif; margin-top: 16px; line-height: 1.5; }
+        #tablecaption { margin-top: 10px; margin-bottom: 20px; font-size: 27px; font-family: 'Trebuchet MS', sans-serif; }
+        
+        table { margin-top: 10px; font-family: system-ui, sans-serif; font-size: 14px; background-color: var(--input-bg); border-collapse: collapse; border-radius: 10px; overflow: hidden; width: 100%; table-layout: fixed; word-wrap: break-word; }
+        th { background-color: var(--table-header-color); font-family: system-ui, sans-serif; font-weight: bold; }
+        th, td { text-align: left; padding: 10px; border: 1px solid var(--table-border); overflow: hidden; }
+        tr:nth-child(even) { background-color: var(--zebra); }
+
+        .col-id { width: 8%; min-width: 35px; }
+        .col-name { width: auto; }
+        .col-shares { width: 22%; white-space: normal; word-break: break-all; }
+        .col-value { width: 22%; white-space: normal; word-break: break-all; }
+        .col-notes { width: 12%; white-space: normal; }
+
+        td.col-shares, td.col-value { font-family: 'Courier New', monospace; }
+
+        .th-content { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .sort-arrow { color: var(--link-color); text-decoration: none; display: flex; align-items: center; padding-left: 5px; }
+        .sort-arrow svg { width: 14px; height: 14px; fill: currentColor; stroke: currentColor; stroke-width: 0.5; transition: transform 0.2s; }
+        .sort-arrow.active svg { stroke-width: 2.5; }
+
+        .quarter-list, .datamethod { list-style: none; padding: 0; margin-top: 50px; display: flex; flex-wrap: wrap; gap: 20px; }
+        .datamethod { margin-top: 15px; margin-bottom: 25px; }
+        .tab-link { text-decoration: none; color: var(--text); opacity: 0.7; padding-bottom: 8px; border-bottom: 3px solid transparent; font-family: system-ui, sans-serif; font-size: 14px; transition: all 0.2s ease; }
+        .tab-link:hover { opacity: 1; }
+        .tab-link.active { opacity: 1; font-weight: bold; border-bottom: 3px solid var(--text); }
+        ul.pagination { list-style: none; padding: 0; margin-top: 10px; margin-bottom: 5px; display: flex; gap: 5px; flex-wrap: wrap; }
+        ul.pagination li a { display: inline-block; padding: 4px 10px; background-color: var(--input-bg); border: 1px solid var(--table-border); border-radius: 4px; font-size: 13px; font-family: system-ui, sans-serif; color: var(--link-color); text-decoration: none; }
+        ul.pagination li a.active { background-color: var(--link-color); color: var(--bg); border-color: var(--link-color); }
+        #entrycount { font-size: 13px; font-family: system-ui, sans-serif; margin-top: 2px; color: var(--text); opacity: 0.7; }
+        a { color: var(--link-color); text-decoration: none; }
+        hr { border: 0; height: 1px; background: var(--table-border); margin-top: 0px; }
+    </style>
+</head>
+
+<h1 id="whaleseyename">WhalesEyE</h1>
+
+<body class="dark" id="body">
+    <button class="theme-btn" id="themeBtn"><img id="themeIcon" src="https://img.icons8.com/ios-filled/50/moon-symbol.png"></button>
+    <div class="theme-menu" id="themeMenu">
+        <div data-mode="dark"><span>Dark</span><span class="mode-check"></span></div>
+        <div data-mode="light"><span>Light</span><span class="mode-check"></span></div>
+        <div data-mode="system"><span>System</span><span class="mode-check"></span></div>
+    </div>
+
+    <div class="header-container">
+        <span class="manager-label">Institutional Investment Manager</span>
+        <div id="companyname">{{ company_name }}</div>
+    </div>
+    
+    <div id="Overview">{{ description | safe }}</div>
+
+    <ul class="quarter-list">
+        {% for q in quarters %}
+        <li><a href="/cik/{{ cik }}/{{ q }}/{{ mode }}" class="tab-link {{ 'active' if q == quarter else '' }}">{{ q }}</a></li>
+        {% endfor %}
+    </ul>
+    <hr>
+
+    <div id="tablecaption">Institutional Holdings ({{ quarter }})</div>
+
+    <ul class="datamethod">
+        <li><a href="/cik/{{ cik }}/{{ quarter }}/normalized" class="tab-link {{ 'active' if mode == 'normalized' else '' }}">Normalized</a></li>
+        <li><a href="/cik/{{ cik }}/{{ quarter }}/raw" class="tab-link {{ 'active' if mode == 'raw' else '' }}">Raw</a></li>
+    </ul>
+
+    {% for table in tables %}
+    {% if mode == "raw" %}<h4 style="margin-top: 40px; font-family: system-ui;">{{ table.title }}</h4>{% endif %}
+    
+    {% set s_key = (table.param_name + '_sort') if mode == 'raw' else 'sort' %}
+    {% set d_key = (table.param_name + '_dir') if mode == 'raw' else 'dir' %}
+
+    <table>
+        <thead>
+            <tr>
+                <th class="col-id">#</th>
+                <th class="col-name">
+                    <div class="th-content">
+                        <span>Name</span>
+                        <a class="sort-arrow {{ 'active' if table.sort == 'name' else '' }}" href="{{ request.url.include_query_params(**{s_key: 'name', d_key: 'asc' if table.sort != 'name' or table.dir == 'desc' else 'desc'}) }}">
+                            {% if table.sort == 'name' and table.dir == 'asc' %}
+                            <svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z"/></svg>
+                            {% elif table.sort == 'name' and table.dir == 'desc' %}
+                            <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                            {% else %}
+                            <svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z M7 10l5 5 5-5z"/></svg>
+                            {% endif %}
+                        </a>
+                    </div>
+                </th>
+                <th class="col-shares">
+                    <div class="th-content">
+                        <span>Shares</span>
+                        <a class="sort-arrow {{ 'active' if table.sort == 'shares' else '' }}" href="{{ request.url.include_query_params(**{s_key: 'shares', d_key: 'desc' if table.sort != 'shares' or table.dir == 'asc' else 'asc'}) }}">
+                            {% if table.sort == 'shares' and table.dir == 'asc' %}
+                            <svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z"/></svg>
+                            {% elif table.sort == 'shares' and table.dir == 'desc' %}
+                            <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                            {% else %}
+                            <svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z M7 10l5 5 5-5z"/></svg>
+                            {% endif %}
+                        </a>
+                    </div>
+                </th>
+                <th class="col-value">
+                    <div class="th-content">
+                        <span>Value</span>
+                        <a class="sort-arrow {{ 'active' if (table.sort == 'value' or not table.sort) else '' }}" href="{{ request.url.include_query_params(**{s_key: 'value', d_key: 'desc' if (table.sort != 'value' and table.sort is defined) or table.dir == 'asc' else 'asc'}) }}">
+                            {% if (table.sort == 'value' or not table.sort) and (table.dir == 'desc' or not table.dir) %}
+                            <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                            {% elif table.sort == 'value' and table.dir == 'asc' %}
+                            <svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z"/></svg>
+                            {% else %}
+                            <svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z M7 10l5 5 5-5z"/></svg>
+                            {% endif %}
+                        </a>
+                    </div>
+                </th>
+                <th class="col-notes">
+                    <div class="th-content">
+                        <span>Notes</span>
+                        {% if table.sort == 'notes' %}
+                            <a class="sort-arrow active" href="{{ request.url.include_query_params(**{s_key: 'value', d_key: 'desc'}) }}">
+                                <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                            </a>
+                        {% else %}
+                            <a class="sort-arrow" href="{{ request.url.include_query_params(**{s_key: 'notes', d_key: 'desc'}) }}">
+                                <svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z M7 10l5 5 5-5z"/></svg>
+                            </a>
+                        {% endif %}
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in table.rows %}
+            <tr>
+                <td class="col-id">{{ loop.index + ((table.current_page - 1) * 50) }}</td>
+                <td class="col-name"><a href="/cusip/{{ row.cusip }}/{{ quarter }}">{{ row.display_name }}</a></td>
+                <td class="col-shares">{{ "{:,}".format(row.total_shares) if row.total_shares else 0 }}</td>
+                <td class="col-value">${{ "{:,}".format(row.total_value) if row.total_value else 0 }}</td>
+                <td class="col-notes">{{ row.notes }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="apple">
+        <ul class="pagination">
+            {% if table.total_pages > 1 %}
+                {% for p in range(1, table.total_pages + 1) %}
+                    {% if p == 1 or p == table.total_pages or (p >= table.current_page - 2 and p <= table.current_page + 2) %}
+                        <li><a href="{{ request.url.include_query_params(**{table.param_name: p}) }}" class="{{ 'active' if p == table.current_page else '' }}">{{ p }}</a></li>
+                    {% elif p == table.current_page - 3 or p == table.current_page + 3 %}
+                        <li><a href="#">..</a></li>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+    <div id="entrycount">Page {{ table.current_page }} of {{ table.total_pages }}</div>
+    <hr style="margin-top: 20px; opacity: 0.3;">
+    {% endfor %}
+
+    <script>
+        const body = document.getElementById("body");
+        const menu = document.getElementById("themeMenu");
+        const themeBtn = document.getElementById("themeBtn");
+        const themeIcon = document.getElementById("themeIcon");
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+        function updateThemeIcon(isDark) { themeIcon.src = isDark ? "https://img.icons8.com/ios-filled/50/moon-symbol.png" : "https://img.icons8.com/ios-filled/50/sun--v1.png"; }
+        function updateMenuIndicators(mode) { menu.querySelectorAll('div').forEach(div => { const checkSpan = div.querySelector('.mode-check'); checkSpan.innerHTML = (div.getAttribute('data-mode') === mode) ? '&#x2713;' : ''; }); }
+
+        function setTheme(mode) {
+            body.className = mode;
+            localStorage.setItem('themePreference', mode);
+            menu.style.display = "none";
+            const isDark = mode === 'dark' || (mode === 'system' && mediaQuery.matches);
+            updateThemeIcon(isDark);
+            updateMenuIndicators(mode);
+        }
+
+        themeBtn.onclick = (e) => { e.stopPropagation(); menu.style.display = menu.style.display === "block" ? "none" : "block"; };
+        document.addEventListener('click', (e) => { if (menu.style.display === 'block' && !menu.contains(e.target) && !themeBtn.contains(e.target)) menu.style.display = 'none'; });
+
+        function initializeTheme() {
+            const storedTheme = localStorage.getItem('themePreference') || 'system';
+            const menuItems = menu.querySelectorAll('div');
+            menuItems[0].onclick = () => setTheme('dark');
+            menuItems[1].onclick = () => setTheme('light');
+            menuItems[2].onclick = () => setTheme('system');
+            setTheme(storedTheme);
+        }
+        initializeTheme();
+    </script>
+</body>
+</html>
