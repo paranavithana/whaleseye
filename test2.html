@@ -15,6 +15,13 @@
         :root { --bg: #000; --text: #fff; --input-bg: #222; --icon-filter: invert(1); --table-border: #333; --table-header-color: #000; --tick-color: white; --link-color: #A3BAFF; --zebra: rgba(255, 255, 255, 0.05); }
         .light { --bg: #fff; --text: #000; --input-bg: #f1f1f1; --icon-filter: invert(0); --table-border: #999; --table-header-color: #888; --tick-color: black; --link-color: #0044cc; --zebra: rgba(0, 0, 0, 0.05); }
 
+        /* Hide the Notes column on screens smaller than 600px */
+@media screen and (max-width: 600px) {
+    .col-notes {
+        display: none;
+    }
+}
+        
         .manager-label { 
             font-size: 15px; 
             color: var(--text); 
@@ -241,4 +248,5 @@
 </p>
 
 </body>
+
 </html>
