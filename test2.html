@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Global Atlantic Asset Management - WhalesEyE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* --- THEME SYSTEM VARIABLES --- */
+        @media (prefers-color-scheme: light) {
+            .system { --bg: #fff; --text: #000; --input-bg: #f1f1f1; --icon-filter: invert(0); --table-border: #999; --table-header-color: #888; --tick-color: black; --link-color: #0044cc; --zebra: rgba(0, 0, 0, 0.05); }
+        }
+        @media (prefers-color-scheme: dark) {
+            .system { --bg: #000; --text: #fff; --input-bg: #222; --icon-filter: invert(1); --table-border: #333; --table-header-color: #000; --tick-color: white; --link-color: #A3BAFF; --zebra: rgba(255, 255, 255, 0.05); }
+        }
+        :root { --bg: #000; --text: #fff; --input-bg: #222; --icon-filter: invert(1); --table-border: #333; --table-header-color: #000; --tick-color: white; --link-color: #A3BAFF; --zebra: rgba(255, 255, 255, 0.05); }
+        .light { --bg: #fff; --text: #000; --input-bg: #f1f1f1; --icon-filter: invert(0); --table-border: #999; --table-header-color: #888; --tick-color: black; --link-color: #0044cc; --zebra: rgba(0, 0, 0, 0.05); }
+
+        .manager-label { 
+            font-size: 15px; 
+            color: var(--text); 
+            opacity: 0.7; 
+            font-family: system-ui, sans-serif; 
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .theme-btn { position: fixed; top: 10px; right: 10px; background: none; border: none; cursor: pointer; z-index: 1000; }
+        .theme-btn img { width: 26px; height: 26px; filter: var(--icon-filter); transition: filter 0.25s; }
+        .theme-menu { font-family: system-ui, sans-serif; position: fixed; top: 55px; right: 20px; background: var(--input-bg); border-radius: 8px; padding: 10px 0; display: none; width: 140px; z-index: 1000; }
+        .theme-menu div { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; cursor: pointer; color: var(--text); }
+        .theme-menu div:hover { background: rgba(255,255,255,0.1); }
+
+        #whaleseyename { border: 0%; padding: 15px; margin: 0%; background-color: var(--bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--table-border); font-family: system-ui, sans-serif; margin-top: -1vh; margin-left: -1vh; margin-right: -1vh; font-size: 20px; width: 100%; top: 0; left: 0; z-index: 999; position: fixed; }
+        body { background-color: var(--bg); color: var(--text); margin: 0; padding: 0; max-width: 850px; margin: 0 auto; padding: 10px; gap: 2px; }
+        
+        .header-container { margin-top: 110px; margin-bottom: 20px; }
+        #companyname { font-size: 34px; font-family: 'Trebuchet MS', sans-serif; margin-top: 0; }
+        
+        #Overview { font-size: 16px; font-family: sans-serif; margin-top: 16px; line-height: 1.5; }
+        #Overview1 { font-size: 16px; font-family: sans-serif; margin-top: 16px; line-height: 1.5; }
+        p { font-size: 15px; font-family: sans-serif; margin-top: 10px; line-height: 1.2; margin-bottom: 10px; opacity: 1;}
+        #tablecaption { margin-top: 10px; margin-bottom: 20px; font-size: 27px; font-family: 'Trebuchet MS', sans-serif; }
+        
+        table { margin-top: 10px; font-family: system-ui, sans-serif; font-size: 14px; background-color: var(--input-bg); border-collapse: collapse; border-radius: 10px; overflow: hidden; width: 100%; table-layout: fixed; word-wrap: break-word; }
+        th { background-color: var(--table-header-color); font-family: system-ui, sans-serif; font-weight: bold; }
+        th, td { text-align: left; padding: 10px; border: 1px solid var(--table-border); overflow: hidden; }
+        tr:nth-child(even) { background-color: var(--zebra); }
+
+        .col-id { width: 8%; min-width: 35px; }
+        .col-name { width: auto; }
+        .col-shares { width: 22%; white-space: normal; word-break: break-all; }
+        .col-value { width: 22%; white-space: normal; word-break: break-all; }
+        .col-notes { width: 12%; white-space: normal; }
+
+        td.col-shares, td.col-value { font-family: 'Courier New', monospace; }
+
+        .th-content { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .sort-arrow { color: var(--link-color); text-decoration: none; display: flex; align-items: center; padding-left: 5px; }
+        .sort-arrow svg { width: 14px; height: 14px; fill: currentColor; stroke: currentColor; stroke-width: 0.5; transition: transform 0.2s; }
+        .sort-arrow.active svg { stroke-width: 2.5; }
+
+        .quarter-list, .datamethod { list-style: none; padding: 0; margin-top: 50px; display: flex; flex-wrap: wrap; gap: 20px; }
+        .datamethod { margin-top: 15px; margin-bottom: 25px; }
+        .tab-link { text-decoration: none; color: var(--text); opacity: 0.7; padding-bottom: 8px; border-bottom: 3px solid transparent; font-family: system-ui, sans-serif; font-size: 14px; transition: all 0.2s ease; }
+        .tab-link:hover { opacity: 1; }
+        .tab-link.active { opacity: 1; font-weight: bold; border-bottom: 3px solid var(--text); }
+        ul.pagination { list-style: none; padding: 0; margin-top: 10px; margin-bottom: 5px; display: flex; gap: 5px; flex-wrap: wrap; }
+        ul.pagination li a { display: inline-block; padding: 4px 10px; background-color: var(--input-bg); border: 1px solid var(--table-border); border-radius: 4px; font-size: 13px; font-family: system-ui, sans-serif; color: var(--link-color); text-decoration: none; }
+        ul.pagination li a.active { background-color: var(--link-color); color: var(--bg); border-color: var(--link-color); }
+        #entrycount { font-size: 13px; font-family: system-ui, sans-serif; margin-top: 2px; color: var(--text); opacity: 0.7; }
+        a { color: var(--link-color); text-decoration: none; }
+        hr { border: 0; height: 1px; background: var(--table-border); margin-top: 0px; }
+    </style>
+</head>
+
+<h1 id="whaleseyename">WhalesEyE</h1>
+
+<body class="dark" id="body">
+    <button class="theme-btn" id="themeBtn"><img id="themeIcon" src="https://img.icons8.com/ios-filled/50/moon-symbol.png"></button>
+    <div class="theme-menu" id="themeMenu">
+        <div data-mode="dark"><span>Dark</span><span class="mode-check"></span></div>
+        <div data-mode="light"><span>Light</span><span class="mode-check"></span></div>
+        <div data-mode="system"><span>System</span><span class="mode-check"></span></div>
+    </div>
+
+    <div class="header-container">
+        <span class="manager-label">Institutional Investment Manager</span>
+        <div id="companyname">Global Atlantic Asset Management</div>
+    </div>
+    
+    <div id="Overview1">A leading global investment firm focusing on long-term value creation across diverse asset classes and sectors.</div>
+
+    <ul class="quarter-list">
+        <li><a href="#" class="tab-link active">2023-Q4</a></li>
+        <li><a href="#" class="tab-link">2023-Q3</a></li>
+        <li><a href="#" class="tab-link">2023-Q2</a></li>
+        <li><a href="#" class="tab-link">2023-Q1</a></li>
+    </ul>
+    <hr>
+
+    <div id="tablecaption">Institutional Holdings (2023-Q4)</div>
+
+    <ul class="datamethod">
+        <li><a href="#" class="tab-link active">Normalized</a></li>
+        <li><a href="#" class="tab-link">Raw</a></li>
+    </ul>
+
+    <div id='Overview' style="font-family:sans-serif; font-size:16px;">
+      Portfolio Summary: <strong>50</strong> holdings shown with a total value of <strong>$12,450,400,300</strong>.
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th class="col-id">#</th>
+                <th class="col-name">
+                    <div class="th-content">
+                        <span>Name</span>
+                        <a class="sort-arrow" href="#"><svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z M7 10l5 5 5-5z"/></svg></a>
+                    </div>
+                </th>
+                <th class="col-shares">
+                    <div class="th-content">
+                        <span>Shares</span>
+                        <a class="sort-arrow" href="#"><svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z M7 10l5 5 5-5z"/></svg></a>
+                    </div>
+                </th>
+                <th class="col-value">
+                    <div class="th-content">
+                        <span>Value</span>
+                        <a class="sort-arrow active" href="#"><svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></a>
+                    </div>
+                </th>
+                <th class="col-notes">
+                    <div class="th-content">
+                        <span>Notes</span>
+                        <a class="sort-arrow" href="#"><svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z M7 10l5 5 5-5z"/></svg></a>
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+            </tbody>
+    </table>
+
+    <div class="apple">
+        <ul class="pagination">
+            <li><a href="#" class="active">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">..</a></li>
+            <li><a href="#">12</a></li>
+        </ul>
+    </div>
+    <div id="entrycount">Page 1 of 12</div>
+    <hr style="margin-top: 20px; opacity: 0.3;">
+
+    <script>
+        // DEMO DATA INJECTION
+        const stocks = [
+            ["APPLE INC", 15420000, 2965000000, ""], ["MICROSOFT CORP", 6200450, 2331000000, ""],
+            ["NVIDIA CORP", 1850000, 916000000, "Call"], ["AMAZON.COM INC", 5100000, 775000000, ""],
+            ["ALPHABET INC-CL A", 4200000, 580000000, ""], ["META PLATFORMS INC", 1500000, 525000000, ""],
+            ["TESLA INC", 2100000, 480000000, "Put"], ["BERKSHIRE HATHAWAY", 1200, 450000000, ""],
+            ["ELI LILLY & CO", 650000, 420000000, ""], ["BROADCOM INC", 380000, 410000000, ""],
+            ["JPMORGAN CHASE & CO", 2400000, 380000000, ""], ["VISA INC-CLASS A", 1400000, 360000000, ""],
+            ["UNITEDHEALTH GROUP", 680000, 350000000, ""], ["MASTERCARD INC-A", 820000, 340000000, ""],
+            ["EXXON MOBIL CORP", 3100000, 330000000, ""], ["PROCTER & GAMBLE", 2100000, 310000000, ""],
+            ["COSTCO WHOLESALE", 450000, 305000000, ""], ["JOHNSON & JOHNSON", 1900000, 300000000, ""],
+            ["HOME DEPOT INC", 880000, 295000000, ""], ["MERCK & CO. INC.", 2400000, 280000000, ""],
+            ["ABBVIE INC", 1600000, 275000000, ""], ["CHEVRON CORP", 1800000, 270000000, ""],
+            ["ADOBE INC", 480000, 265000000, ""], ["PEPSICO INC", 1450000, 260000000, ""],
+            ["COCA-COLA CO", 4200000, 255000000, ""], ["WALMART INC", 1500000, 250000000, ""],
+            ["ASML HOLDING NV", 280000, 245000000, ""], ["THERMO FISHER SCI", 420000, 240000000, ""],
+            ["SAMSUNG ELEC-GDR", 120000, 235000000, ""], ["NOVO NORDISK A/S", 1900000, 230000000, ""],
+            ["TOYOTA MOTOR CORP", 1100000, 225000000, ""], ["ORACLE CORP", 1800000, 220000000, ""],
+            ["ACCENTURE PLC-A", 650000, 215000000, ""], ["MCDONALD'S CORP", 720000, 210000000, ""],
+            ["CISCO SYSTEMS INC", 3900000, 205000000, ""], ["SALESFORCE INC", 850000, 200000000, ""],
+            ["DANAHER CORP", 780000, 195000000, ""], ["INTEL CORP", 4500000, 190000000, ""],
+            ["INTUIT INC", 310000, 185000000, ""], ["VERIZON COMMUNIC", 4800000, 180000000, ""],
+            ["WELLS FARGO & CO", 3500000, 175000000, ""], ["COMCAST CORP-A", 4100000, 170000000, ""],
+            ["TEXAS INSTRUMENTS", 980000, 165000000, ""], ["QUALCOMM INC", 1100000, 160000000, ""],
+            ["IBM CORP", 1000000, 155000000, ""], ["LOWE'S COS INC", 680000, 150000000, ""],
+            ["CVS HEALTH CORP", 1800000, 145000000, ""], ["AMD INC", 1200000, 140000000, ""],
+            ["NIKE INC-CL B", 1150000, 135000000, ""], ["NETFLIX INC", 280000, 130000000, ""]
+        ];
+
+        const tbody = document.getElementById('table-body');
+        stocks.forEach((stock, index) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="col-id">${index + 1}</td>
+                <td class="col-name"><a href="#">${stock[0]}</a></td>
+                <td class="col-shares">${stock[1].toLocaleString()}</td>
+                <td class="col-value">$${stock[2].toLocaleString()}</td>
+                <td class="col-notes">${stock[3]}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        // THEME SCRIPT
+        const body = document.getElementById("body");
+        const menu = document.getElementById("themeMenu");
+        const themeBtn = document.getElementById("themeBtn");
+        const themeIcon = document.getElementById("themeIcon");
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+        function updateThemeIcon(isDark) { themeIcon.src = isDark ? "https://img.icons8.com/ios-filled/50/moon-symbol.png" : "https://img.icons8.com/ios-filled/50/sun--v1.png"; }
+        function updateMenuIndicators(mode) { menu.querySelectorAll('div').forEach(div => { const checkSpan = div.querySelector('.mode-check'); checkSpan.innerHTML = (div.getAttribute('data-mode') === mode) ? '&#x2713;' : ''; }); }
+
+        function setTheme(mode) {
+            body.className = mode;
+            localStorage.setItem('themePreference', mode);
+            menu.style.display = "none";
+            const isDark = mode === 'dark' || (mode === 'system' && mediaQuery.matches);
+            updateThemeIcon(isDark);
+            updateMenuIndicators(mode);
+        }
+
+        themeBtn.onclick = (e) => { e.stopPropagation(); menu.style.display = menu.style.display === "block" ? "none" : "block"; };
+        document.addEventListener('click', (e) => { if (menu.style.display === 'block' && !menu.contains(e.target) && !themeBtn.contains(e.target)) menu.style.display = 'none'; });
+
+        function initializeTheme() {
+            const storedTheme = localStorage.getItem('themePreference') || 'system';
+            const menuItems = menu.querySelectorAll('div');
+            menuItems[0].onclick = () => setTheme('dark');
+            menuItems[1].onclick = () => setTheme('light');
+            menuItems[2].onclick = () => setTheme('system');
+            setTheme(storedTheme);
+        }
+        initializeTheme();
+    </script>
+
+<hr>	
+<p>
+  Portfolio data is normalized using SEC Form 13F filings, including the 
+  13F-HR (<a href="#" target="_blank">0001140361-24-001000</a>, filed 2024-02-14).
+</p>
+<p>
+  From 2023-01-03 onward, the SEC requires values to be reported in nearest dollars. Earlier filings reported values in thousands.
+</p>
+
+</body>
+</html>
