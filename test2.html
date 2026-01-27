@@ -134,7 +134,7 @@
                 </th>
                 <th class="col-value">
                     <div class="th-content">
-                        <span>Value</span>
+                        <span>Value ($)</span>
                         <a class="sort-arrow active" href="#"><svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></a>
                     </div>
                 </th>
@@ -199,7 +199,7 @@
                 <td class="col-id">${index + 1}</td>
                 <td class="col-name"><a href="#">${stock[0]}</a></td>
                 <td class="col-shares">${stock[1].toLocaleString()}</td>
-                <td class="col-value">$${stock[2].toLocaleString()}</td>
+                <td class="col-value">{stock[2].toLocaleString()}</td>
                 <td class="col-notes">${stock[3]}</td>
             `;
             tbody.appendChild(tr);
@@ -250,6 +250,7 @@
 </body>
 
 </html>
+
 
 
 
