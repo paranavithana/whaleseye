@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Site Under Development</title>
+    <title>Synapzer | Under Development</title>
     <style>
         /* Basic reset */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #1e1e2f, #3a3a5e);
-            color: #fff;
+            background: #000; /* black background */
+            color: #fff; /* white text */
             height: 100vh;
             display: flex;
             flex-direction: column;
@@ -20,28 +20,55 @@
             text-align: center;
         }
 
-        h1 {
+        .logo {
+            font-family: "Cambria Math", Cambria, serif;
             font-size: 3em;
+            font-weight: bold;
             margin-bottom: 0.5em;
-            animation: pulse 2s infinite;
+            color: #fff;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
+            font-weight: normal;
         }
 
         p {
-            font-size: 1.2em;
+            font-size: 1.1em;
             color: #ccc;
+            margin-bottom: 1.5em;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; }
-            100% { transform: scale(1); opacity: 1; }
+        .social-links {
+            display: flex;
+            gap: 1.5em;
         }
 
-        .logo {
-            margin-bottom: 1em;
-            font-size: 2em;
-            font-weight: bold;
+        .social-links a {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
             color: #ff9900;
+        }
+
+        .social-links svg {
+            width: 24px;
+            height: 24px;
+            margin-right: 0.5em;
+            fill: currentColor;
+        }
+
+        @media (max-width: 600px) {
+            .logo { font-size: 2.2em; }
+            h1 { font-size: 2em; }
+            p { font-size: 1em; }
+            .social-links svg { width: 20px; height: 20px; }
         }
     </style>
 </head>
@@ -49,5 +76,21 @@
     <div class="logo">Synapzer</div>
     <h1>🚧 Under Development</h1>
     <p>Our website is currently under development. Check back soon!</p>
+    <div class="social-links">
+        <a href="https://x.com/MPParanavithana" target="_blank">
+            <!-- X logo SVG -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M23.954 4.569c-.885.392-1.83.656-2.825.775a4.932 4.932 0 002.163-2.724 9.864 9.864 0 01-3.127 1.195 4.916 4.916 0 00-8.38 4.482A13.936 13.936 0 011.671 3.149a4.822 4.822 0 001.523 6.574 4.903 4.903 0 01-2.229-.616c-.054 2.281 1.581 4.415 3.949 4.89a4.935 4.935 0 01-2.224.084 4.928 4.928 0 004.604 3.417 9.867 9.867 0 01-6.102 2.104c-.395 0-.787-.023-1.175-.068a13.945 13.945 0 007.548 2.212c9.142 0 14.307-7.721 13.995-14.646a9.936 9.936 0 002.457-2.535z"/>
+            </svg>
+            X
+        </a>
+        <a href="https://www.linkedin.com/in/paranavithana" target="_blank">
+            <!-- LinkedIn logo SVG -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M4.98 3.5a2.5 2.5 0 110 5 2.5 2.5 0 010-5zm.02 4.9H2V21h3V8.4zm7.5 0h-2.99V21h3v-6.2c0-3.34 4-3.6 4 0V21h3v-7.6c0-6.3-6.75-6.1-7.01-3z"/>
+            </svg>
+            LinkedIn
+        </a>
+    </div>
 </body>
 </html>
